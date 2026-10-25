@@ -138,7 +138,10 @@ services:
 
   # Jenkins
   jenkins:
-    image: jenkins/jenkins:lts-jdk21
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    image: banking-jenkins:custom
     container_name: banking-jenkins
     environment:
       - JENKINS_OPTS=--httpPort=8080

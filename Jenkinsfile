@@ -1,17 +1,16 @@
 pipeline {
-    agent { label 'docker java maven' }
+    agent any
 
     options {
         timestamps()
-        ansiColor('xterm')
-        timeout(time: 20, unit: 'MINUTES')
+        timeout(time: 30, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '20'))
         disableConcurrentBuilds()
     }
 
     environment {
         REGISTRY        = 'docker.io'
-        IMAGE_NAMESPACE = "${env.DOCKER_HUB_USERNAME ?: 'meridian-bank'}"
+        IMAGE_NAMESPACE = "${env.DOCKER_HUB_USERNAME ?: 'cmeridian-bank'}"
         IMAGE_NAME      = 'meridian-core-backend'
         IMAGE_TAG       = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
     }
@@ -23,6 +22,8 @@ pipeline {
                 sh 'git rev-parse --short HEAD'
                 sh 'java -version'
                 sh 'mvn -version'
+                sh 'docker version'
+                sh 'docker compose version'
             }
         }
 
@@ -78,40 +79,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to staging') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    sh """
-                        cd infrastructure
-                        docker compose -f docker-compose.yml up -d --no-deps --force-recreate backend || true
-                    """
-                }
-            }
-        }
-
-        stage('Smoke test') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh '''
-                    for i in $(seq 1 20); do
-                        if curl -sf http://localhost:8080/api/actuator/health > /dev/null; then
-                            echo "Service is healthy"
-                            exit 0
-                        fi
-                        echo "Waiting for service..."
-                        sleep 3
-                    done
-                    echo "Service did not become healthy in time"
-                    exit 1
-                '''
-            }
-        }
     }
 
     post {
@@ -120,9 +87,6 @@ pipeline {
         }
         failure {
             echo "Build #${env.BUILD_NUMBER} FAILED on ${env.BRANCH_NAME}"
-        }
-        always {
-            sh 'docker image prune -f --filter "label=pipeline=true" || true'
         }
     }
 }

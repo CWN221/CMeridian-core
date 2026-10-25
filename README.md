@@ -37,7 +37,7 @@ CMeridian Core is a banking operations system built with Spring Boot, JavaFX and
 
 ## Screenshots
 
-### Desktop Client — Dashboard
+### Desktop Client - Dashboard
 
 ![Dashboard](docs/screenshots/dashboard.png)
 
@@ -57,7 +57,7 @@ CMeridian Core is a banking operations system built with Spring Boot, JavaFX and
 
 ![Loans](docs/screenshots/loans.png)
 
-### Monitoring — Grafana JVM Dashboard
+### Monitoring - Grafana JVM Dashboard
 
 ![Grafana JVM](docs/screenshots/grafana-jvm.png)
 
@@ -171,7 +171,7 @@ Check Prometheus targets at http://localhost:9090/targets
 | Actuator | http://localhost:8080/actuator |
 | Prometheus | http://localhost:9090 |
 | Grafana | http://localhost:3001 |
-| pgAdmin | http://localhost:5050 |
+| pgAdmin | http://localhost:8082 |
 | RabbitMQ | http://localhost:15672 |
 | Jenkins | http://localhost:8082 |
 

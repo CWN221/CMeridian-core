@@ -8,8 +8,10 @@ RUN apt-get update && \
         curl \
         gnupg \
         lsb-release \
+        maven \
     && rm -rf /var/lib/apt/lists/*
 
+# Docker CLI installation (unchanged from before)
 RUN install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
     chmod a+r /etc/apt/keyrings/docker.asc && \

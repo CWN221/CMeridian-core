@@ -1,0 +1,235 @@
+#!/usr/bin/env groovy
+
+// Jenkins Pipeline for Banking System
+
+pipeline {
+    agent any
+    
+    environment {
+        // Docker registry
+        DOCKER_REGISTRY = 'docker.io/banking'
+        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
+        
+        // SonarQube
+        SONAR_HOST_URL = 'http://sonarqube:9000'
+        SONAR_TOKEN = credentials('sonar-token')        
+        
+        // Environment
+        ENVIRONMENT = 'dev'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                echo 'Repository checked out successfully'
+            }
+        }
+        
+        stage('Set Version') {
+            steps {
+                script {
+                    def version = sh(script: 'git describe --tags --always', returnStdout: true).trim()
+                    env.APP_VERSION = version
+                    echo "Application version: ${env.APP_VERSION}"
+                }
+            }
+        }
+        
+        stage('Backend Build') {
+            steps {
+                dir('backend') {
+                    sh '''
+                        echo "Building Backend Application..."
+                        mvn clean compile
+                        mvn test
+                        mvn package -DskipTests
+                    '''
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'backend/target/*.jar', fingerprint: true
+                }
+            }
+        }
+        
+        stage('Code Quality') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh '''
+                            mvn sonar:sonar \
+                                -Dsonar.projectKey=banking-system \
+                                -Dsonar.projectName="Banking System" \
+                                -Dsonar.host.url=${SONAR_HOST_URL} \
+                                -Dsonar.token=${SONAR_TOKEN} \
+                                -Dsonar.java.binaries=backend/target/classes \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=backend/target/site/jacoco/jacoco.xml \
+                                -Dsonar.exclusions=**/*Test.java,**/model/**,**/dto/**
+                        '''
+                    }
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                script {
+                    sh '''
+                        echo "Running OWASP Dependency Check..."
+                        mvn org.owasp:dependency-check-maven:check \
+                            -Dformat=HTML \
+                            -DoutputDirectory=target
+                    '''
+                    archiveArtifacts artifacts: '**/dependency-check-report.html'
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageName = "${DOCKER_REGISTRY}/banking-backend:${DOCKER_IMAGE_TAG}"
+                    sh """
+                        docker build -t ${imageName} backend/
+                        docker tag ${imageName} ${DOCKER_REGISTRY}/banking-backend:latest
+                    """
+                }
+            }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-hub-credentials',
+                        usernameVariable: 'DOCKER_USER',
+                        passwordVariable: 'DOCKER_PASS'
+                    )]) {
+                        sh """
+                            echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+                            docker push ${DOCKER_REGISTRY}/banking-backend:${DOCKER_IMAGE_TAG}
+                            docker push ${DOCKER_REGISTRY}/banking-backend:latest
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to Development') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                script {
+                    sh '''
+                        echo "Deploying to Development Environment..."
+                        cd infrastructure
+                        docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+                        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+                    '''
+                }
+            }
+        }
+        
+        stage('Integration Tests') {
+            steps {
+                script {
+                    sh '''
+                        echo "Running Integration Tests..."
+                        cd backend
+                        mvn verify -Pintegration-tests
+                    '''
+                }
+            }
+        }
+        
+        stage('Performance Tests') {
+            steps {
+                script {
+                    sh '''
+                        echo "Running Performance Tests..."
+                        # Using JMeter or Gatling
+                        # jmeter -n -t performance/test-plan.jmx -l results.jtl
+                    '''
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    sh '''
+                        echo "Deploying to Staging Environment..."
+                        # Kubernetes deployment
+                        kubectl set image deployment/banking-backend banking-backend=${DOCKER_REGISTRY}/banking-backend:${DOCKER_IMAGE_TAG} -n staging
+                        kubectl rollout status deployment/banking-backend -n staging
+                    '''
+                }
+            }
+        }
+        
+        stage('Smoke Tests') {
+            steps {
+                script {
+                    sh '''
+                        echo "Running Smoke Tests..."
+                        curl -f http://staging.banking.local/health || exit 1
+                        curl -f http://staging.banking.local/api/actuator/health || exit 1
+                    '''
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Clean up
+            cleanWs()
+            
+            // Send notifications
+            script {
+                def status = currentBuild.result ?: 'SUCCESS'
+                def color = status == 'SUCCESS' ? 'good' : status == 'UNSTABLE' ? 'warning' : 'danger'
+                
+                slackSend(
+                    channel: '#banking-cicd',
+                    color: color,
+                    message: """
+                        Banking System Pipeline ${status}
+                        Job: ${env.JOB_NAME}
+                        Build: ${env.BUILD_NUMBER}
+                        Duration: ${currentBuild.durationString}
+                        View: ${env.BUILD_URL}
+                    """
+                )
+            }
+        }
+        success {
+            emailext(
+                subject: "SUCCESS: Banking System Build #${env.BUILD_NUMBER}",
+                body: "The build was successful. \n\nBuild URL: ${env.BUILD_URL}",
+                to: "devops@banking.com"
+            )
+        }
+        failure {
+            emailext(
+                subject: "FAILURE: Banking System Build #${env.BUILD_NUMBER}",
+                body: "The build failed. \n\nBuild URL: ${env.BUILD_URL}\n\nPlease check the logs.",
+                to: "devops@banking.com, developers@banking.com"
+            )
+        }
+    }
+}

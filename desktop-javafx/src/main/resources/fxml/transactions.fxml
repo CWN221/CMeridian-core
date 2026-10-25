@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.TransactionsController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Transactions"/>
+                <Label styleClass="page-subtitle" text="Process and review customer transactions"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" styleClass="search-field" promptText="Search reference or account"/>
+            <Button styleClass="btn-secondary" text="Refresh" onAction="#onRefresh"/>
+            <Button styleClass="btn-primary" text="New Transaction" onAction="#onNewTransaction"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="content-area">
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Total Transactions"/>
+                    <Label fx:id="statsTotal" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Total Volume"/>
+                    <Label fx:id="statsVolume" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Pending"/>
+                    <Label fx:id="statsPending" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Reversed"/>
+                    <Label fx:id="statsReversed" styleClass="stat-value" text="0"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="panel" VBox.vgrow="ALWAYS">
+                <VBox styleClass="panel-header">
+                    <Label styleClass="section-title" text="Transaction Register"/>
+                </VBox>
+                <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS" prefHeight="420">
+                    <columns>
+                        <TableColumn fx:id="colReference" text="Reference" prefWidth="200"/>
+                        <TableColumn fx:id="colTime" text="Date" prefWidth="180"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="140"/>
+                        <TableColumn fx:id="colAccount" text="Account" prefWidth="180"/>
+                        <TableColumn fx:id="colAmount" text="Amount" prefWidth="140"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="160"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No transactions yet."/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

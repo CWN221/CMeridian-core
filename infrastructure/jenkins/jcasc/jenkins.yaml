@@ -1,0 +1,68 @@
+jenkins:
+  systemMessage: "Meridian Core CI/CD"
+  numExecutors: 2
+  mode: NORMAL
+  scmCheckoutRetryCount: 2
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "${JENKINS_ADMIN_PASSWORD:-admin123}"
+          name: "Administrator"
+          email: "admin@meridian.local"
+
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
+
+  nodes:
+    - permanent:
+        name: "docker-agent"
+        labelString: "docker java maven"
+        remoteFS: "/home/jenkins/agent"
+        numExecutors: 2
+        mode: EXCLUSIVE
+        retentionStrategy: "always"
+        launcher:
+          docker:
+            image: "jenkins/inbound-agent:latest-jdk21"
+            args: "-v /var/run/docker.sock:/var/run/docker.sock"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "docker-hub-credentials"
+              username: "${DOCKER_HUB_USERNAME:}"
+              password: "${DOCKER_HUB_PASSWORD:}"
+              description: "Docker Hub for pushing images"
+
+tool:
+  git:
+    installations:
+      - name: "Default"
+        home: "git"
+  jdk:
+    installations:
+      - name: "jdk21"
+        home: "/opt/java/openjdk"
+  maven:
+    installations:
+      - name: "maven3"
+        home: "/usr/share/maven"
+
+unclassified:
+  location:
+    url: "http://localhost:8081/"
+    adminAddress: "admin@meridian.local"
+
+  gitHubPluginConfig:
+    hookUrl: "http://localhost:8081/github-webhook/"

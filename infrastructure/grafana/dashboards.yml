@@ -1,0 +1,13 @@
+# Grafana Dashboards Provisioning
+
+apiVersion: 1
+
+providers:
+  - name: 'Banking System'
+    orgId: 1
+    folder: 'Banking System'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

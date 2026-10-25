@@ -1,0 +1,202 @@
+## YAML Template.
+---
+spring:
+  application:
+    name: banking-system-backend
+  
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/banking_system}
+    username: ${DB_USERNAME:bank_user}
+    password: ${DB_PASSWORD:SecurePass123!}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: BankingSystemHikariPool
+  
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        format_sql: true
+        use_sql_comments: true
+        generate_statistics: false
+        default_schema: public
+        id:
+          new_generator_mappings: true
+        connection:
+          autocommit: false
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false          
+    show-sql: ${SHOW_SQL:false}
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+    table: flyway_schema_history
+    schemas: public
+  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+          max-wait: 1000ms
+  
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:admin}
+    password: ${RABBITMQ_PASSWORD:admin123}
+    virtual-host: /
+    listener:
+      simple:
+        acknowledge-mode: manual
+        concurrency: 5
+        max-concurrency: 10
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000ms
+          multiplier: 2.0
+  
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000
+      cache-null-values: false
+  
+  security:
+    jwt:
+      secret: "anMKyqK1p4DXpEY35eejEFgAG1KXSthaMJOQOE7wbFW"
+      expiration: 3600000  # 1 hour
+      refresh-expiration: 604800000  # 7 days
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    date-format: yyyy-MM-dd'T'HH:mm:ss
+    time-zone: UTC
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    session:
+      timeout: 30m
+      cookie:
+        http-only: true
+        secure: ${COOKIE_SECURE:false}
+        same-site: strict
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 1024
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 20
+    connection-timeout: 20000
+    max-connections: 10000
+    accept-count: 100
+
+management:
+  server:
+    base-path: /actuator
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,env,configprops,mappings
+
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    metrics:
+      enabled: true
+
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+  metrics:
+    tags:
+      application: cmeridian-core
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 50ms,100ms,200ms,500ms,1s
+
+
+logging:
+  level:
+    com.bank.system: ${LOG_LEVEL:INFO}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
+    org.hibernate.SQL: ${HIBERNATE_SQL_LEVEL:WARN}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${HIBERNATE_BINDER_LEVEL:WARN}
+    org.springframework.web: ${WEB_LOG_LEVEL:INFO}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application.log
+    max-size: 100MB
+    max-history: 30
+
+app:
+  security:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:8080}
+    rate-limit:
+      enabled: true
+      default-limit: 100
+      login-limit: 10
+      time-window: 60  # seconds
+    account-lock:
+      max-failed-attempts: 5
+      lock-duration: 900  # 15 minutes in seconds
+    password:
+      min-length: 8
+      require-uppercase: true
+      require-lowercase: true
+      require-digits: true
+      require-special: true
+  transaction:
+    daily-limit:
+      withdrawal: 500000
+      transfer: 1000000
+    max-amount: 10000000
+    suspense-account: ${SUSPENSE_ACCOUNT:100000}
+  notifications:
+    enabled: true
+    email:
+      enabled: true
+      host: ${SMTP_HOST:smtp.gmail.com}
+      port: ${SMTP_PORT:587}
+      username: ${SMTP_USERNAME:}
+      password: ${SMTP_PASSWORD:}
+    sms:
+      enabled: false
+      provider: ${SMS_PROVIDER:}
+      api-key: ${SMS_API_KEY:}

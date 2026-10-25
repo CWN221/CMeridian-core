@@ -1,0 +1,61 @@
+# ============================================
+# Jenkins Plugins for Banking System
+# ============================================
+
+# Core Plugins
+workflow-aggregator:596.v5c21de6d1f37
+git:5.2.1
+git-client:4.7.0
+github:1.40.0
+github-branch-source:1775.v97d7d3b_0d7c3
+docker-workflow:572.v950f58993843
+docker-plugin:1.4.0
+kubernetes:4221.v6d2a_ea_c3af03
+credentials:1337.v60b_d7b_c7c9f
+credentials-binding:681.vf91669a_32e49
+plain-credentials:143.v1b_df8b_d3b_e48
+
+# Build Tools
+maven-plugin:3.23
+gradle:2.9
+nodejs:1.6.1
+jdk-tool:80.v8a_dee33ed6f0
+
+# Quality
+sonar:2.17.2
+jacoco:3.3.2
+warnings-ng:11.1.0
+checkstyle:4.11.0
+findbugs:5.3.0
+pmd:4.15.0
+
+# Deployment
+cloudbees-folder:6.928.v7c780211d66e
+pipeline-stage-view:2.34
+pipeline-utility-steps:2.16.0
+pipeline-graph-analysis:216.vfd8b_ece7b_1a_
+
+# Monitoring
+prometheus:2.2.0
+monitoring:1.92.0
+metrics:4.2.21-451.vf3c3b_b_61804f
+
+# Utility
+blueocean:1.27.11
+discord-notifier:2.0.0
+email-ext:2.104
+ansicolor:1.0.4
+build-timeout:1.31
+pipeline-rest-api:2.34
+docker-commons:439.va_3cb_0a_6a_0e9
+docker-build-step:2.11
+docker-java-api:3.4.0-87.v1928c9b_70e44
+kubernetes-client-api:6.12.2-240.v57880ce8b_0b_5
+kubernetes-credentials:0.236.v15f908d93e5a_
+configuration-as-code:1775.v810dc018b_6bc
+
+# Security
+owasp-markup-formatter:162.v0e6ec0fcfcf6
+zap:1.0.0
+dependency-check:5.4.5
+artifact-manager-s3:1.1.0

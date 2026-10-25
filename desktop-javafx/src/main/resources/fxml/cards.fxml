@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.CardsController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Cards"/>
+                <Label styleClass="page-subtitle" text="Debit, credit and prepaid card management"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" styleClass="search-field" promptText="Search card or account"/>
+            <Button styleClass="btn-secondary" text="Refresh" onAction="#onRefresh"/>
+            <Button styleClass="btn-primary" text="Issue Card" onAction="#onIssueCard"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="content-area">
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Total Cards"/>
+                    <Label fx:id="statsTotal" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Active"/>
+                    <Label fx:id="statsActive" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Blocked"/>
+                    <Label fx:id="statsBlocked" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Cancelled"/>
+                    <Label fx:id="statsCancelled" styleClass="stat-value" text="0"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="panel" VBox.vgrow="ALWAYS">
+                <VBox styleClass="panel-header">
+                    <Label styleClass="section-title" text="Card Register"/>
+                </VBox>
+                <TableView fx:id="cardTable" VBox.vgrow="ALWAYS" prefHeight="420">
+                    <columns>
+                        <TableColumn fx:id="colCardNumber" text="Card Number" prefWidth="200"/>
+                        <TableColumn fx:id="colHolder" text="Cardholder" prefWidth="200"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="colBrand" text="Brand" prefWidth="110"/>
+                        <TableColumn fx:id="colExpiry" text="Expiry" prefWidth="120"/>
+                        <TableColumn fx:id="colAccount" text="Account" prefWidth="180"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="240"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No cards yet. Click Issue Card to create the first one."/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" 
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.bank.desktop.controller.components.SidebarController"
+      styleClass="sidebar">
+
+    <VBox styleClass="sidebar-brand" spacing="2">
+        <Label styleClass="sidebar-brand-title" text="CMeridian Bank"/>
+    </VBox>
+
+    <VBox styleClass="sidebar-nav" VBox.vgrow="ALWAYS">
+
+        <Label styleClass="nav-section-label" text="WORKSPACE"/>
+
+        <HBox styleClass="nav-item" fx:id="navDashboard" onMouseClicked="#goDashboard">
+            <Label styleClass="nav-item-text" text="Dashboard"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navCustomers" onMouseClicked="#goCustomers">
+            <Label styleClass="nav-item-text" text="Customers"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navAccounts" onMouseClicked="#goAccounts">
+            <Label styleClass="nav-item-text" text="Accounts"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navTransactions" onMouseClicked="#goTransactions">
+            <Label styleClass="nav-item-text" text="Transactions"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navLoans" onMouseClicked="#goLoans">
+            <Label styleClass="nav-item-text" text="Loans"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navCards" onMouseClicked="#goCards">
+            <Label styleClass="nav-item-text" text="Cards"/>
+        </HBox>
+
+        <Label styleClass="nav-section-label" text="ADMINISTRATION"/>
+
+        <HBox styleClass="nav-item" fx:id="navReports" onMouseClicked="#goReports">
+            <Label styleClass="nav-item-text" text="Reports"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navAudit" onMouseClicked="#goAudit">
+            <Label styleClass="nav-item-text" text="Audit Log"/>
+        </HBox>
+
+        <HBox styleClass="nav-item" fx:id="navSettings" onMouseClicked="#goSettings">
+            <Label styleClass="nav-item-text" text="Settings"/>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+    <VBox styleClass="sidebar-footer" spacing="4">
+        <Label fx:id="userName" styleClass="sidebar-user-name" text="John Mwangi"/>
+        <Label fx:id="userRole" styleClass="sidebar-user-role" text="Branch Manager, HQ"/>
+        <HBox spacing="8" style="-fx-padding: 8 0 0 0;">
+            <Label fx:id="signOutLink" text="Sign out" onMouseClicked="#signOut"
+                   style="-fx-text-fill: #ee2b2bff; -fx-font-size: 12px; -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+
+</VBox>

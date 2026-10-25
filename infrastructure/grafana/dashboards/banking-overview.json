@@ -1,0 +1,210 @@
+{
+  "title": "Banking System Overview",
+  "uid": "banking-overview",
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Application Status",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job='spring-boot'}",
+          "format": "time_series",
+          "legendFormat": "{{instance}}"
+        }
+      ],
+      "gridPos": {"h": 4, "w": 3, "x": 0, "y": 0},
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Total Customers",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "customer_count_total",
+          "format": "time_series"
+        }
+      ],
+      "gridPos": {"h": 4, "w": 3, "x": 3, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Total Accounts",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "account_count_total",
+          "format": "time_series"
+        }
+      ],
+      "gridPos": {"h": 4, "w": 3, "x": 6, "y": 0}
+    },
+    {
+      "id": 4,
+      "title": "Total Transactions",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "transaction_count_total",
+          "format": "time_series"
+        }
+      ],
+      "gridPos": {"h": 4, "w": 3, "x": 9, "y": 0}
+    },
+    {
+      "id": 5,
+      "title": "Transaction Volume",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(transactions_total[5m])",
+          "legendFormat": "TXN Rate"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 4}
+    },
+    {
+      "id": 6,
+      "title": "Response Time (95th Percentile)",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket[5m])) by (le, uri))",
+          "legendFormat": "{{uri}}"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 4}
+    },
+    {
+      "id": 7,
+      "title": "Error Rate",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(http_server_requests_seconds_count{status='500'}[5m]) / rate(http_server_requests_seconds_count[5m]) * 100",
+          "legendFormat": "Error %"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 4, "x": 16, "y": 4}
+    },
+    {
+      "id": 8,
+      "title": "Database Connections",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "hikaricp_connections_active",
+          "legendFormat": "Active"
+        },
+        {
+          "expr": "hikaricp_connections_idle",
+          "legendFormat": "Idle"
+        },
+        {
+          "expr": "hikaricp_connections_max",
+          "legendFormat": "Max"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 12}
+    },
+    {
+      "id": 9,
+      "title": "Cache Hit Rate",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rate(redis_keyspace_hits_total[5m]) / (rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m])) * 100",
+          "legendFormat": "Hit Rate %"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 12}
+    },
+    {
+      "id": 10,
+      "title": "Queue Depth",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "rabbitmq_queue_messages_ready",
+          "legendFormat": "{{queue}}"
+        }
+      ],
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 12}
+    },
+    {
+      "id": 11,
+      "title": "CPU Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode='idle'}[5m])) * 100)",
+          "legendFormat": "CPU %"
+        }
+      ],
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 20}
+    },
+    {
+      "id": 12,
+      "title": "Memory Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100",
+          "legendFormat": "Memory %"
+        }
+      ],
+      "gridPos": {"h": 6, "w": 6, "x": 6, "y": 20}
+    },
+    {
+      "id": 13,
+      "title": "Disk Usage",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "node_filesystem_avail_bytes{mountpoint='/'} / node_filesystem_size_bytes{mountpoint='/'} * 100",
+          "legendFormat": "Available %"
+        }
+      ],
+      "gridPos": {"h": 6, "w": 6, "x": 12, "y": 20}
+    },
+    {
+      "id": 14,
+      "title": "System Uptime",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "time() - process_start_time_seconds{job='spring-boot'}",
+          "format": "time_series",
+          "legendFormat": "Uptime (seconds)"
+        }
+      ],
+      "gridPos": {"h": 4, "w": 3, "x": 12, "y": 0}
+    }
+  ],
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "templating": {
+    "list": []
+  },
+  "refresh": "30s",
+  "schemaVersion": 27,
+  "style": "dark"
+}

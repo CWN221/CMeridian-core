@@ -1,0 +1,126 @@
+{
+  "rabbit_version": "3.12.0",
+  "users": [
+    {
+      "name": "admin",
+      "password_hash": "generated_hash",
+      "tags": "administrator"
+    },
+    {
+      "name": "banking_app",
+      "password_hash": "generated_hash",
+      "tags": ""
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    },
+    {
+      "name": "banking"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "banking_app",
+      "vhost": "banking",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "queues": [
+    {
+      "name": "transaction.queue",
+      "vhost": "banking",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "notification.queue",
+      "vhost": "banking",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "audit.queue",
+      "vhost": "banking",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "loan.queue",
+      "vhost": "banking",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "report.queue",
+      "vhost": "banking",
+      "durable": true,
+      "auto_delete": false
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "banking.exchange",
+      "vhost": "banking",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false
+    },
+    {
+      "name": "banking.dlx",
+      "vhost": "banking",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    }
+  ],
+  "bindings": [
+    {
+      "source": "banking.exchange",
+      "vhost": "banking",
+      "destination": "transaction.queue",
+      "destination_type": "queue",
+      "routing_key": "transaction.*",
+      "arguments": {}
+    },
+    {
+      "source": "banking.exchange",
+      "vhost": "banking",
+      "destination": "notification.queue",
+      "destination_type": "queue",
+      "routing_key": "notification.*",
+      "arguments": {}
+    },
+    {
+      "source": "banking.exchange",
+      "vhost": "banking",
+      "destination": "audit.queue",
+      "destination_type": "queue",
+      "routing_key": "audit.*",
+      "arguments": {}
+    },
+    {
+      "source": "banking.exchange",
+      "vhost": "banking",
+      "destination": "loan.queue",
+      "destination_type": "queue",
+      "routing_key": "loan.*",
+      "arguments": {}
+    },
+    {
+      "source": "banking.exchange",
+      "vhost": "banking",
+      "destination": "report.queue",
+      "destination_type": "queue",
+      "routing_key": "report.*",
+      "arguments": {}
+    }
+  ]
+}

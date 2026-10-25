@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.DashboardController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Dashboard"/>
+                <Label styleClass="page-subtitle" text="Overview across all branches"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button styleClass="btn-secondary" text="Refresh" onAction="#refresh"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <VBox styleClass="content-area">
+
+                <HBox spacing="16">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Active Customers"/>
+                        <Label fx:id="lblCustomers" styleClass="stat-value" text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Total Accounts"/>
+                        <Label fx:id="lblAccounts" styleClass="stat-value" text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Transactions Today"/>
+                        <Label fx:id="lblTransactions" styleClass="stat-value" text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Pending Loan Approvals"/>
+                        <Label fx:id="lblLoans" styleClass="stat-value" text="0"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Total Deposits"/>
+                        <Label fx:id="lblDeposits" styleClass="stat-value" text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Loan Portfolio"/>
+                        <Label fx:id="lblLoanPortfolio" styleClass="stat-value" text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Blocked Cards"/>
+                        <Label fx:id="lblBlocked" styleClass="stat-value"  text="0"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                        <Label styleClass="stat-label" text="Frozen Accounts"/>
+                        <Label fx:id="lblFrozen" styleClass="stat-value" text="0"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="16">
+                    <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                        <VBox styleClass="panel-header">
+                            <Label styleClass="section-title" text="Recent Transactions"/>
+                            <Label styleClass="section-subtitle" text="Last 10 activity across all accounts"/>
+                        </VBox>
+                        <VBox fx:id="activityList" spacing="0"/>
+                    </VBox>
+
+                    <VBox styleClass="panel" prefWidth="360">
+                        <VBox styleClass="panel-header">
+                            <Label styleClass="section-title" text="Quick Actions"/>
+                            <Label styleClass="section-subtitle" text="Common tasks"/>
+                        </VBox>
+                        <VBox spacing="8">
+                            <Button styleClass="btn-primary" maxWidth="Infinity" text="Register New Customer" onAction="#goNewCustomer"/>
+                            <Button styleClass="btn-secondary" maxWidth="Infinity" text="Open New Account" onAction="#goNewAccount"/>
+                            <Button styleClass="btn-secondary" maxWidth="Infinity" text="Process Transaction" onAction="#goTransactions"/>
+                            <Button styleClass="btn-secondary" maxWidth="Infinity" text="Review Loans" onAction="#goLoans"/>
+                        </VBox>
+                    </VBox>
+                </HBox>
+
+                <VBox styleClass="panel">
+                    <VBox styleClass="panel-header">
+                        <Label styleClass="section-title" text="Branch Performance"/>
+                        <Label styleClass="section-subtitle" text="Top 5 branches by total deposits"/>
+                    </VBox>
+                    <VBox fx:id="branchList" spacing="0"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

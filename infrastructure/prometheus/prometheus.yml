@@ -1,0 +1,27 @@
+# Prometheus Configuration
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: development
+    service: banking-system
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  # Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Spring Boot backend
+  - job_name: 'spring-boot'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          application: 'cmeridian-core'
+          environment: 'development'

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.AuditController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Audit Log"/>
+                <Label styleClass="page-subtitle" text="System-wide activity trail for compliance review"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField styleClass="search-field" promptText="Search by user or resource"/>
+            <Button styleClass="btn-secondary" text="Export Audit Trail"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="content-area">
+            <VBox styleClass="panel" VBox.vgrow="ALWAYS">
+                <VBox styleClass="panel-header">
+                    <Label styleClass="section-title" text="Audit Trail"/>
+                    <Label styleClass="section-subtitle" text="Last 30 days of activity, newest first"/>
+                </VBox>
+                <TableView VBox.vgrow="ALWAYS" prefHeight="500">
+                    <columns>
+                        <TableColumn text="Timestamp" prefWidth="180"/>
+                        <TableColumn text="User" prefWidth="140"/>
+                        <TableColumn text="Action" prefWidth="180"/>
+                        <TableColumn text="Resource" prefWidth="160"/>
+                        <TableColumn text="IP Address" prefWidth="140"/>
+                        <TableColumn text="Status" prefWidth="110"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

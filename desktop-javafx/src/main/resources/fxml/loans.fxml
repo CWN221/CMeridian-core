@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.LoansController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Loans"/>
+                <Label styleClass="page-subtitle" text="Loan applications, approvals and portfolio monitoring"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" styleClass="search-field" promptText="Search loan or customer"/>
+            <Button styleClass="btn-secondary" text="Refresh" onAction="#onRefresh"/>
+            <Button styleClass="btn-primary" text="New Loan" onAction="#onNewLoan"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="content-area">
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Total Loans"/>
+                    <Label fx:id="statsTotal" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Portfolio Value"/>
+                    <Label fx:id="statsPortfolio" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Pending Approval"/>
+                    <Label fx:id="statsPending" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Defaulted"/>
+                    <Label fx:id="statsDefaulted" styleClass="stat-value" text="0"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="panel" VBox.vgrow="ALWAYS">
+                <VBox styleClass="panel-header">
+                    <Label styleClass="section-title" text="Loan Register"/>
+                </VBox>
+                <TableView fx:id="loanTable" VBox.vgrow="ALWAYS" prefHeight="420">
+                    <columns>
+                        <TableColumn fx:id="colLoanNumber" text="Loan Number" prefWidth="150"/>
+                        <TableColumn fx:id="colCustomer" text="Customer" prefWidth="220"/>
+                        <TableColumn fx:id="colType" text="Type" prefWidth="130"/>
+                        <TableColumn fx:id="colPrincipal" text="Principal" prefWidth="140"/>
+                        <TableColumn fx:id="colOutstanding" text="Outstanding" prefWidth="140"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="130"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="260"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No loans yet. Click New Loan to create the first application."/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

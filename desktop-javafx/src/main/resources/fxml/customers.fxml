@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.CustomersController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Customers"/>
+                <Label styleClass="page-subtitle" text="Manage customer profiles and verification status"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" styleClass="search-field" promptText="Search by name, ID, or email"/>
+            <Button styleClass="btn-secondary" text="Refresh" onAction="#onRefresh"/>
+            <Button styleClass="btn-primary" text="New Customer" onAction="#onNewCustomer"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="content-area">
+
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Total Customers"/>
+                    <Label fx:id="statsTotal" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Verified"/>
+                    <Label fx:id="statsVerified" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Pending Verification"/>
+                    <Label fx:id="statsPending" styleClass="stat-value" text="0"/>
+                </VBox>
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="stat-label" text="Active"/>
+                    <Label fx:id="statsActive" styleClass="stat-value" text="0"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="panel" VBox.vgrow="ALWAYS">
+                <VBox styleClass="panel-header">
+                    <Label styleClass="section-title" text="Customer Directory"/>
+                </VBox>
+
+                <TableView fx:id="customerTable" VBox.vgrow="ALWAYS" prefHeight="420">
+                    <columns>
+                        <TableColumn fx:id="colCustomerNumber" text="Customer No." prefWidth="140"/>
+                        <TableColumn fx:id="colName" text="Full Name" prefWidth="220"/>
+                        <TableColumn fx:id="colEmail" text="Email Address" prefWidth="240"/>
+                        <TableColumn fx:id="colPhone" text="Phone" prefWidth="150"/>
+                        <TableColumn fx:id="colNationalId" text="National ID" prefWidth="140"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colActions" text="Actions" prefWidth="200"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No customers yet. Click New Customer to register the first one."/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+        </VBox>
+    </center>
+</BorderPane>

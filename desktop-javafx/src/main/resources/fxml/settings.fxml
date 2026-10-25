@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.bank.desktop.controller.SettingsController"
+            styleClass="app-shell">
+
+    <top>
+        <HBox styleClass="topbar">
+            <VBox>
+                <Label styleClass="page-title" text="Settings"/>
+                <Label styleClass="page-subtitle" text="System configuration and personal preferences"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <VBox styleClass="content-area">
+
+                <VBox styleClass="panel">
+                    <VBox styleClass="panel-header">
+                        <Label styleClass="section-title" text="Personal Preferences"/>
+                    </VBox>
+                    <GridPane hgap="16" vgap="16">
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="6">
+                            <Label styleClass="form-label" text="Display Name"/>
+                            <TextField text="John Mwangi" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="6">
+                            <Label styleClass="form-label" text="Email Address"/>
+                            <TextField text="john.mwangi@cmeridian.co.ke" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="6">
+                            <Label styleClass="form-label" text="Phone Number"/>
+                            <TextField text="+254 712 345 678" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="6">
+                            <Label styleClass="form-label" text="Preferred Language"/>
+                            <ComboBox fx:id="languageCombo" maxWidth="Infinity"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <VBox styleClass="panel">
+                    <VBox styleClass="panel-header">
+                        <Label styleClass="section-title" text="Security"/>
+                    </VBox>
+                    <VBox spacing="12">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <CheckBox selected="true" text="Require password on every login session"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <CheckBox text="Enable two-factor authentication"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <CheckBox selected="true" text="Lock account after five failed login attempts"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        <Button styleClass="btn-secondary" text="Change Password"/>
+                    </VBox>
+                </VBox>
+
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Button styleClass="btn-secondary" text="Cancel"/>
+                    <Button styleClass="btn-primary" text="Save Changes"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>
